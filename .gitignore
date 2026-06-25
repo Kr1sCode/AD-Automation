@@ -1,0 +1,5 @@
+*.csv
+!users.csv.example
+*.log
+.env
+.DS_Store

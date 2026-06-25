@@ -1,0 +1,3 @@
+FirstName,LastName,Department,City,Manager,OU
+Jan,Kowalski,IT,Warszawa,adam.nowak,"OU=IT,OU=Warszawa,DC=firma,DC=pl"
+Anna,Nowak,HR,Warszawa,piotr.wisniewski,"OU=HR,OU=Warszawa,DC=firma,DC=pl"
