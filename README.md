@@ -12,6 +12,7 @@ Każdy folder to osobny case study z pełnym opisem: problem → diagnoza → ro
 | 2 | [02-deactivate-inactive-accounts](./02-deactivate-inactive-accounts/) | Deaktywacja kont po X dniach nieaktywności + przeniesienie do OU Disabled |
 | 3 | [03-inactive-users-report](./03-inactive-users-report/) | Raport kont bez logowania od 90 dni (tylko odczyt) |
 | 4 | [04-privileged-groups-audit](./04-privileged-groups-audit/) | Audyt członkostwa w grupach uprzywilejowanych |
+| 5 | [05-restore-disabled-account](./05-restore-disabled-account/) | Przywracanie konta z OU=Disabled po reklamacji |
 
 ## Wymagania
 
@@ -43,6 +44,32 @@ Import-Module ActiveDirectory
 - Skrypty modyfikujące AD: loguj do CSV, uruchamiaj z konta serwisowego z minimalnymi uprawnieniami
 - Deaktywacja kont: **nigdy delete od razu** — disable → 30 dni na reklamacje → dopiero delete
 
+## Task Scheduler — automatyzacja cykliczna
+
+Raporty i deaktywacje uruchamiaj z dedykowanego konta serwisowego z delegacją AD (nie Domain Admin na co dzień).
+
+```powershell
+# Przykład: miesięczny raport nieaktywnych (scenariusz 03)
+$action = New-ScheduledTaskAction `
+    -Execute "powershell.exe" `
+    -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\Scripts\Get-InactiveADUsersReport.ps1"
+
+$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -WeeksInterval 4 -At 06:00
+
+Register-ScheduledTask `
+    -TaskName "AD-InactiveUsersReport" `
+    -Action $action `
+    -Trigger $trigger `
+    -User "SVC-AD-Report" `
+    -RunLevel Highest
+```
+
+| Zadanie | Skrypt | Częstotliwość |
+|---------|--------|---------------|
+| Raport nieaktywnych | `03-.../Get-InactiveADUsersReport.ps1` | Co 30 dni |
+| Deaktywacja | `02-.../Disable-InactiveADUsers.ps1` | Po akceptacji raportu |
+| Audyt grup | `04-.../Get-PrivilegedGroupsAudit.ps1` | Co kwartał |
+
 ## Licencja
 
-Materiał referencyjny — użyj i modyfikuj według potrzeb organizacji.
+[MIT](./LICENSE) — Copyright (c) 2026 Krzysztof Gawkowski
