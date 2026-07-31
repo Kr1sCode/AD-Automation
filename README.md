@@ -1,5 +1,9 @@
 # AD-Automation
 
+[![GitHub stars](https://img.shields.io/github/stars/Kr1sCode/AD-Automation?style=flat)](https://github.com/Kr1sCode/AD-Automation/stargazers)
+[![License](https://img.shields.io/badge/license-see--LICENSE-blue)](LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/Kr1sCode/AD-Automation)](https://github.com/Kr1sCode/AD-Automation/commits/main)
+
 Zestaw scenariuszy i skryptów PowerShell do codziennej administracji **Active Directory** — onboarding, higiena kont, raportowanie i audyt uprzywilejowanych grup.
 
 Każdy folder to osobny case study z pełnym opisem: problem → diagnoza → root cause → fix → kod → lessons learned.
