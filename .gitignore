@@ -1,5 +1,6 @@
 *.csv
 !users.csv.example
+!.github/traffic/*.csv
 *.log
 .env
 .DS_Store
